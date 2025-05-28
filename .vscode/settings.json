@@ -1,0 +1,56 @@
+// https://code.visualstudio.com/docs/getstarted/settings
+{
+  "workbench.colorCustomizations": {
+    "editorRuler.foreground": "#43adf3"
+  },
+  "files.exclude": {
+    "**/.vscode": false,
+    "**/.venv": true,
+    "**/.gitignore": false,
+    "**/.gitattributes": true,
+    "**/.gitmodules": true,
+  },
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "[markdown]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wrappingIndent": "same",
+    "editor.wordWrapColumn": 80,
+    "editor.rulers": [
+      80
+    ]
+  },
+  "[properties]": {
+    "editor.rulers": [
+      80
+    ]
+  },
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.rulers": [
+      120
+    ],
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  "isort.args": [
+    "--profile",
+    "black"
+  ],
+  "black-formatter.args": [
+    "--line-length",
+    "100"
+  ],
+  "flake8.enabled": false,
+  "python.analysis.typeCheckingMode": "standard",
+}

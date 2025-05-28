@@ -1,0 +1,43 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: stackcalc-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+  redis:
+    image: redis:7.2.5-bookworm
+    container_name: stackcalc-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+  flower:
+    image: gregsi/latest-celery-flower-docker:latest
+    container_name: stackcalc-flower
+    environment:
+      - AMQP_USERNAME=guest
+      - AMQP_PASSWORD=guest
+      - AMQP_ADMIN_USERNAME=guest
+      - AMQP_ADMIN_PASSWORD=guest
+      - AMQP_HOST=rabbitmq
+      - AMQP_PORT=5672
+      - AMQP_ADMIN_HOST=rabbitmq
+      - AMQP_ADMIN_PORT=15672
+      - FLOWER_BASIC_AUTH=flower:flower
+    ports:
+      - "5555:5555"
+    depends_on:
+      - rabbitmq
+      - redis
+
+volumes:
+  rabbitmq_data:
+    driver: local
+  redis_data:
+    driver: local

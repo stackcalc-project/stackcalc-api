@@ -1,0 +1,30 @@
+services:
+  api:
+    image: stackcalc-api-image
+    container_name: stackcalc-api
+    build:
+      context: ..
+      dockerfile: docker/StackCalc.Api.Dockerfile
+    environment:
+      - STACKCALC_API_HOST=0.0.0.0
+      - STACKCALC_API_PORT=8000
+      - STACKCALC_API_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - STACKCALC_API_WORKER_TASKNAME=stackcalc.api.worker.tasks.calculate_test
+      - STACKCALC_API_BACKEND_URL=redis://redis:6379/0
+    ports:
+      - 8000:8000
+    depends_on:
+      - rabbitmq
+      - redis
+  worker:
+    image: stackcalc-worker-image
+    container_name: stackcalc-worker
+    build:
+      context: ..
+      dockerfile: docker/StackCalc.Worker.Dockerfile
+    environment:
+      - STACKCALC_API_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - STACKCALC_API_BACKEND_URL=redis://redis:6379/0
+    depends_on:
+      - rabbitmq
+      - redis

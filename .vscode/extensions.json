@@ -1,0 +1,15 @@
+// https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions
+{
+  "recommendations": [
+    "rslfrkndmrky.rsl-vsc-focused-folder",
+    "yzhang.markdown-all-in-one",
+    "hediet.vscode-drawio",
+    "mhutchie.git-graph",
+    "naumovs.color-highlight",
+    "gruntfuggly.todo-tree",
+    "ms-python.python",
+    "ms-python.autopep8",
+    "ms-python.black-formatter",
+    "ms-python.isort"
+  ]
+}

@@ -1,0 +1,5 @@
+name: stackcalc-api
+
+include:
+  - compose-services.yaml
+  - compose-api.yaml
