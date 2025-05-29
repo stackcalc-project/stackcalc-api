@@ -1,5 +1,5 @@
 # Stage 1
-FROM python:3.13 as builder
+FROM python:3.13 AS builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 COPY pyproject.toml uv.lock .
@@ -15,4 +15,5 @@ COPY stackcalc stackcalc
 ENV VIRTUAL_ENV=/app/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-CMD ["celery", "-A", "stackcalc.api", "worker", "--loglevel=INFO"]
+ENV CELERY_WORKER_NAME=worker@%h
+CMD celery -A stackcalc.api worker --loglevel=INFO -n $CELERY_WORKER_NAME

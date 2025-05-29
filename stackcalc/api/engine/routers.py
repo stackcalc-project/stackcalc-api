@@ -90,14 +90,18 @@ async def create_job_mixed_stack(data: Annotated[MixedProblem, Depends(check_mix
 @router_v1.get("/jobs/{job_id}", tags=["engine"])
 def get_job(job_id: str) -> Job:
     result = AsyncResult(job_id, app=celery)
+    if result is None:
+        raise HTTPException(status_code=404, detail="The job is unknown")
     if result.failed():
-        raise HTTPException(status_code=404, detail="The job failed")
-    key: str = f"celery-task-meta-{job_id}"
-    value = json.loads(db.get(key).decode("utf-8"))  # type: ignore
+        raise HTTPException(status_code=500, detail=str(result.result))
+    db_value = db.get(f"celery-task-meta-{job_id}")
+    if db_value is None:
+        return Job(id=job_id, status="PENDING", progress=0, result=None)
+    json_value = json.loads(db_value.decode("utf-8"))  # type: ignore
     return Job(
         id=job_id,
-        status=value["status"],
-        progress=100 if result.ready() else int(value["progress"]),
+        status=json_value["status"],
+        progress=100 if result.ready() else int(json_value["progress"]),
         result=str(result.get()) if result.ready() else None,
     )
 
@@ -105,5 +109,7 @@ def get_job(job_id: str) -> Job:
 @router_v1.delete("/jobs/{job_id}", tags=["engine"])
 def delete_job(job_id: str) -> Job:
     result = AsyncResult(job_id, app=celery)
+    if result is None:
+        raise HTTPException(status_code=404, detail="The job is unknown")
     result.forget()
     return Job(id=job_id, status="DELETED", progress=0, result=None)

@@ -128,7 +128,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+# .env => keep in git, handy as example and local dev values, don't check in prod values
 .venv
 env/
 venv/
